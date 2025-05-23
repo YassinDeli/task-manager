@@ -28,21 +28,29 @@ export function TasksTableActionBar({ table }: TasksTableActionBarProps) {
   const queryClient = useQueryClient();
   const getIsActionPending = React.useCallback(
     (action: Action) => isPending && currentAction === action,
-    [isPending, currentAction],
+    [isPending, currentAction]
   );
 
-  const { mutateAsync: deleteTask, isPending: isDeletionPending } = useMutation({
-    mutationFn: (id: number) => api.task.remove(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tasks"] });
-    },
-    onError: (error) => {
-      toast.error(error.message);
-    },
-  });
+  const { mutateAsync: deleteTask, isPending: isDeletionPending } = useMutation(
+    {
+      mutationFn: (id: number) => api.task.remove(id),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["tasks"] });
+      },
+      onError: (error) => {
+        toast.error(error.message);
+      },
+    }
+  );
 
   const onTaskExport = React.useCallback(() => {
-    setCurrentAction("export");
+    setCurrentAction({
+      label: "Export",
+      onClick: (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      },
+    });
     startTransition(() => {
       exportTableToCSV(table, {
         excludeColumns: ["select", "actions"],
@@ -52,26 +60,25 @@ export function TasksTableActionBar({ table }: TasksTableActionBarProps) {
   }, [table]);
 
   const { deleteTaskDialog, openDeleteTaskDialog, closeDeleteTaskDialog } =
-  useTaskDeleteDialog({
-    taskLabel: `${rows.length}  Tasks`,
-    deleteTask: async () => {
-      const ids = rows.map((row) => row.original.id);
-      await Promise.all(ids.map((id) => deleteTask(id)));
-      ids.forEach((id) => api.task.remove(id));
-      table.toggleAllRowsSelected(false);
-      taskStore.reset();
-      toast(
-        `${ids.length} task${ids.length > 1 ? "s" : ""} deleted successfully`
-      );
-    },
-    isDeletionPending,
-    resetTask: () => taskStore.reset(),
-  });
+    useTaskDeleteDialog({
+      taskLabel: `${rows.length}  Tasks`,
+      deleteTask: async () => {
+        const ids = rows.map((row) => row.original.id);
+        await Promise.all(ids.map((id) => deleteTask(id)));
+        ids.forEach((id) => api.task.remove(id));
+        table.toggleAllRowsSelected(false);
+        taskStore.reset();
+        toast(
+          `${ids.length} task${ids.length > 1 ? "s" : ""} deleted successfully`
+        );
+      },
+      isDeletionPending,
+      resetTask: () => taskStore.reset(),
+    });
 
-const onTaskDelete = React.useCallback(() => {
-  openDeleteTaskDialog();
-}, [openDeleteTaskDialog]);
-
+  const onTaskDelete = React.useCallback(() => {
+    openDeleteTaskDialog();
+  }, [openDeleteTaskDialog]);
 
   return (
     <TooltipProvider>
@@ -93,7 +100,13 @@ const onTaskDelete = React.useCallback(() => {
           <DataTableActionBarAction
             size="icon"
             tooltip="Export tasks"
-            isPending={getIsActionPending("export")}
+            isPending={getIsActionPending({
+              label: "Export",
+              onClick: (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+              },
+            })}
             onClick={(e) => {
               e.preventDefault();
               onTaskExport();

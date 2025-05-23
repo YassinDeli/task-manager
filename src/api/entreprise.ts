@@ -24,12 +24,14 @@ const findPaginated = async ({
   console.log("Request Params for Paginated:", params); // Log request parameters
   const response = await axios.get<Paginated<Entreprise>>(
     `/api/entreprises/list`,
-    { params: {
-      ...params,
-      join: "address", // Ensure project data is included
-    }, }
+    {
+      params: {
+        ...params,
+        join: "address", // Ensure project data is included
+      },
+    }
   );
-  
+
   console.log("Response Data from Paginated Request:", response.data); // Log the response
   return response.data;
 };
@@ -76,20 +78,23 @@ const update = async (
   entrepriseId: number,
   Entreprise: Partial<Entreprise>
 ): Promise<Entreprise> => {
-  console.log(`Updating entreprise with ID: ${entrepriseId} and data:`, Entreprise); // Log the update details
+  console.log(
+    `Updating entreprise with ID: ${entrepriseId} and data:`,
+    Entreprise
+  ); // Log the update details
   const response = await axios.put<Entreprise>(
     `/api/entreprises/${entrepriseId}`,
     Entreprise
-    
   );
   console.log("Response Data from Update:", response.data); // Log the response
   return response.data;
 };
 
-const remove = async (entrepriseId: number): Promise<void> => {
+const remove = async (entrepriseId: number) => {
   console.log(`Deleting entreprise with ID: ${entrepriseId}`); // Log the ID being deleted
-  await axios.delete(`/api/entreprises/${entrepriseId}`);
+  const response = await axios.delete(`/api/entreprises/${entrepriseId}`);
   console.log(`Entreprise with ID: ${entrepriseId} has been deleted`); // Log after deletion
+  return response.data;
 };
 
 const seed = async (): Promise<Entreprise> => {

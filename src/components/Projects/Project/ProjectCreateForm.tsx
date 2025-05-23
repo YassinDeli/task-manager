@@ -121,7 +121,7 @@ export const ProjectCreateForm = ({ className }: ProjectCreateFormProps) => {
       case 2:
         return <ProjectValidation />;
       case 3:
-        return <ProjectConfirmation onSubmit={handleCreateProject} />;
+        return <ProjectConfirmation onConfirm={handleCreateProject} />;
       default:
         return null;
     }

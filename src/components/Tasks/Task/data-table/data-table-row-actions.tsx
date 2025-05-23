@@ -30,9 +30,7 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
   const user = row.original;
   const {
     openUpdateTaskSheet,
-    openActivateTaskDialog,
     openDeleteTaskDialog,
-    openDeactivateTaskDialog,
     openDuplicateTaskDialog,
   } = useTaskActions();
 

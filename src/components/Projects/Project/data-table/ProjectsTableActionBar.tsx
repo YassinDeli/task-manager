@@ -28,21 +28,28 @@ export function ProjectsTableActionBar({ table }: ProjectsTableActionBarProps) {
   const queryClient = useQueryClient();
   const getIsActionPending = React.useCallback(
     (action: Action) => isPending && currentAction === action,
-    [isPending, currentAction],
+    [isPending, currentAction]
   );
 
-  const { mutateAsync: deleteProject, isPending: isDeletionPending } = useMutation({
-    mutationFn: (id: number) => api.project.remove(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["projects"] });
-    },
-    onError: (error) => {
-      toast.error(error.message);
-    },
-  });
+  const { mutateAsync: deleteProject, isPending: isDeletionPending } =
+    useMutation({
+      mutationFn: (id: number) => api.project.remove(id),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["projects"] });
+      },
+      onError: (error) => {
+        toast.error(error.message);
+      },
+    });
 
   const onProjectExport = React.useCallback(() => {
-    setCurrentAction("export");
+    setCurrentAction({
+      label: "Export",
+      onClick: (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      },
+    });
     startTransition(() => {
       exportTableToCSV(table, {
         excludeColumns: ["select", "actions"],
@@ -51,8 +58,11 @@ export function ProjectsTableActionBar({ table }: ProjectsTableActionBarProps) {
     });
   }, [table]);
 
-  const { deleteProjectDialog, openDeleteProjectDialog, closeDeleteProjectDialog } =
-  useProjectDeleteDialog({
+  const {
+    deleteProjectDialog,
+    openDeleteProjectDialog,
+    closeDeleteProjectDialog,
+  } = useProjectDeleteDialog({
     projectLabel: `${rows.length}  Projects`,
     deleteProject: async () => {
       const ids = rows.map((row) => row.original.id);
@@ -68,10 +78,9 @@ export function ProjectsTableActionBar({ table }: ProjectsTableActionBarProps) {
     resetProject: () => projectStore.reset(),
   });
 
-const onProjectDelete = React.useCallback(() => {
-  openDeleteProjectDialog();
-}, [openDeleteProjectDialog]);
-
+  const onProjectDelete = React.useCallback(() => {
+    openDeleteProjectDialog();
+  }, [openDeleteProjectDialog]);
 
   return (
     <TooltipProvider>
@@ -93,7 +102,10 @@ const onProjectDelete = React.useCallback(() => {
           <DataTableActionBarAction
             size="icon"
             tooltip="Export projects"
-            isPending={getIsActionPending("export")}
+            isPending={getIsActionPending({
+              label: "Export",
+              onClick: () => onProjectExport(),
+            })}
             onClick={(e) => {
               e.preventDefault();
               onProjectExport();

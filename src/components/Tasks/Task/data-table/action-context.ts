@@ -3,8 +3,8 @@ import React from "react";
 export const TaskActionsContext = React.createContext({
   openCreateTaskSheet: () => {},
   openUpdateTaskSheet: () => {},
-  openActivateTaskDialog: () => {},
-  openDeactivateTaskDialog: () => {},
+  // openActivateTaskDialog: () => {},
+  // openDeactivateTaskDialog: () => {},
   openDeleteTaskDialog: () => {},
   openDuplicateTaskDialog: () => {},
   searchTerm: "",

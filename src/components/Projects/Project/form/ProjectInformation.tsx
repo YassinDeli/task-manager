@@ -47,7 +47,7 @@ export const ProjectInformation = ({ className }: ProjectInformationProps) => {
                 description: "Brief overview of the project's goals.",
                 error: projectStore.errors?.description?.[0],
                 props: {
-                  value: projectStore.description,
+                  value: projectStore.description?.toString(),
                   onChange: (value) => {
                     projectStore.set("description", value);
                     projectStore.resetError("description");

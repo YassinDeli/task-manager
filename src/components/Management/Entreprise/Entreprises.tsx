@@ -108,10 +108,7 @@ export default function Entreprises() {
   });
 
   const { mutate: deleteEntreprise, isPending: isDeletionPending } = useMutation({
-    mutationFn: (id?: number) => {
-      if (id === undefined) {
-        throw new Error("Entreprise ID is missing");
-      }
+    mutationFn: async (id: number) => {
       return api.entreprise.remove(id);
     },
     onSuccess: (response: ServerResponse<Entreprise>) => {
@@ -125,10 +122,11 @@ export default function Entreprises() {
     const entrepriseData = entrepriseStore.getEntreprise();
 
     const updatePayload = {
-      name: entrepriseData.name,
-      phone: entrepriseData.phone,
-      email: entrepriseData.email,
-      address: entrepriseStore.getEntrepriseAddress() // Get the address data
+      name: entrepriseData.name || "",
+      phone: entrepriseData.phone || "",
+      email: entrepriseData.email || "",
+      responsibleId: entrepriseData.responsibleId ?? 0, // Ensure a default value
+      address: entrepriseStore.getEntrepriseAddress() || {} // Ensure a default value
     };
 
     const result = entrepriseSchema.safeParse(updatePayload);
@@ -146,7 +144,7 @@ export default function Entreprises() {
 
     updateEntreprise({
       id: entrepriseStore.id,
-      entreprise: updatePayload,
+      entreprise: updatePayload as UpdateEnterpriseDto,
     });
   };
 
@@ -170,7 +168,7 @@ export default function Entreprises() {
     closeDeleteEntrepriseDialog,
   } = useEntrepriseDeleteDialog({
     entrepriseLabel: entrepriseStore.name,
-    deleteEntreprise: () => deleteEntreprise(entrepriseStore.id),
+    deleteEntreprise: () => deleteEntreprise(entrepriseStore.id || 0),
     isDeletionPending,
     resetEntreprise: () => {
       entrepriseStore.reset();

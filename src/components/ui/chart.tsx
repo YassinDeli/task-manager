@@ -5,12 +5,14 @@ import { type LegendProps } from "recharts";
 import { Legend, ResponsiveContainer, Tooltip, TooltipProps } from "recharts";
 
 import { cn } from "@/lib/utils";
+import { LucideIcon } from "lucide-react";
 
 export type ChartConfig = Record<
   string,
   {
     label: string;
     color: string;
+    icon?: LucideIcon;
   }
 >;
 
@@ -41,7 +43,7 @@ function ChartRoot({ config, className, children, ...props }: ChartRootProps) {
       {...props}
     >
       <ResponsiveContainer width="100%" height="100%">
-        {children}
+        {React.isValidElement(children) ? children : <div />}
       </ResponsiveContainer>
     </div>
   );
@@ -61,6 +63,7 @@ interface ChartLegendProps extends LegendProps {
 }
 
 function ChartLegend({ className, ...props }: ChartLegendProps) {
+  //@ts-ignore
   return <Legend className={cn("", className)} {...props} />;
 }
 
@@ -111,6 +114,7 @@ interface ChartTooltipProps extends Omit<TooltipProps<any, any>, "content"> {
 function ChartTooltip({ className, content, ...props }: ChartTooltipProps) {
   return (
     <Tooltip
+      // @ts-ignore
       content={content}
       cursor={false}
       className={cn("", className)}
@@ -130,6 +134,8 @@ interface ChartTooltipContentProps
     payload: Record<string, any>;
   }>;
   label?: string;
+  labelFormatter: (value: string) => string;
+  indicator?: string;
   hideLabel?: boolean;
 }
 

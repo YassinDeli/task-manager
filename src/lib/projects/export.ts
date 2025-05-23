@@ -6,7 +6,7 @@ export function exportTableToCSV<TData>(
     filename?: string;
     excludeColumns?: (keyof TData | "select" | "actions")[];
     onlySelected?: boolean;
-  } = {},
+  } = {}
 ): void {
   const {
     filename = "table",
@@ -17,7 +17,7 @@ export function exportTableToCSV<TData>(
   const headers = table
     .getAllLeafColumns()
     .map((column) => column.id)
-    .filter((id) => !excludeColumns.includes(id));
+    .filter((id) => !excludeColumns.includes(id as keyof TData));
 
   const csvContent = [
     headers.join(","),
@@ -32,7 +32,7 @@ export function exportTableToCSV<TData>(
             ? `"${cellValue.replace(/"/g, '""')}"`
             : cellValue;
         })
-        .join(","),
+        .join(",")
     ),
   ].join("\n");
 

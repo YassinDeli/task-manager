@@ -236,7 +236,7 @@ export const TaskForm: React.FC<TaskFormProps> = ({
                     "resize-none min-h-[120px]",
                     taskStore.errors.description?.[0] && "border-destructive"
                   )}
-                  value={taskStore.description}
+                  value={taskStore.description || ""}
                   onChange={(e) => {
                     taskStore.set("description", e.target.value);
                     taskStore.resetError("description");
@@ -383,7 +383,6 @@ export const TaskForm: React.FC<TaskFormProps> = ({
                   Due Date
                 </Label>
                 <DatePicker
-                  id="due-date"
                   className="w-full"
                   value={
                     taskStore.dueDate ? new Date(taskStore.dueDate) : undefined
@@ -448,7 +447,7 @@ export const TaskForm: React.FC<TaskFormProps> = ({
                           <Avatar className="h-6 w-6">
                             <AvatarImage
                               src={`https://avatar.vercel.sh/${user.username}.png`}
-                              alt={user.username}
+                              alt={user.username || ""}
                             />
                             <AvatarFallback>
                               {user.username?.substring(0, 2).toUpperCase()}
@@ -538,7 +537,7 @@ export const TaskForm: React.FC<TaskFormProps> = ({
                     <Avatar className="h-10 w-10">
                       <AvatarImage
                         src={`https://avatar.vercel.sh/${selectedUser.username}.png`}
-                        alt={selectedUser.username}
+                        alt={selectedUser.username || ""}
                       />
                       <AvatarFallback>
                         {selectedUser.username?.substring(0, 2).toUpperCase()}

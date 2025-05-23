@@ -77,7 +77,9 @@ export const UpcomingMilestones: React.FC<UpcomingMilestonesProps> = ({
                     {formattedDate}
                   </p>
                 </div>
-                <Badge variant={statusVariant}>{milestone.status}</Badge>
+                <Badge 
+                variant={statusVariant as any}>
+                  {milestone.status}</Badge>
               </div>
             );
           })}

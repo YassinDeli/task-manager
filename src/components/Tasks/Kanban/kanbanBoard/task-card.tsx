@@ -1,17 +1,23 @@
-"use client"
+"use client";
 
-import { useDrag } from "react-dnd"
-import { Edit, Trash2 } from "lucide-react"
+import { useDrag } from "react-dnd";
+import { Edit, Trash2 } from "lucide-react";
 import type { Task } from "@/types";
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 type TaskCardProps = {
-  task: Task
-  onEdit: () => void
-  onDelete: () => void
-}
+  task: Task;
+  onEdit: () => void;
+  onDelete: () => void;
+};
 
 export function TaskCard({ task, onEdit, onDelete }: TaskCardProps) {
   const [{ isDragging }, drag] = useDrag({
@@ -20,18 +26,21 @@ export function TaskCard({ task, onEdit, onDelete }: TaskCardProps) {
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
-  })
+  });
 
   const priorityColors = {
     LOW: "bg-green-100 text-green-800 hover:bg-green-100",
     MEDIUM: "bg-yellow-100 text-yellow-800 hover:bg-yellow-100",
     HIGH: "bg-red-100 text-red-800 hover:bg-red-100",
-  }
+  };
 
   return (
     <Card
+      // @ts-ignore
       ref={drag}
-      className={`cursor-grab ${isDragging ? "opacity-50" : "opacity-100"} transition-opacity`}
+      className={`cursor-grab ${
+        isDragging ? "opacity-50" : "opacity-100"
+      } transition-opacity`}
     >
       <CardHeader className="p-4 pb-2">
         <div className="flex justify-between items-start">
@@ -73,5 +82,5 @@ export function TaskCard({ task, onEdit, onDelete }: TaskCardProps) {
         </Button>
       </CardFooter>
     </Card>
-  )
+  );
 }

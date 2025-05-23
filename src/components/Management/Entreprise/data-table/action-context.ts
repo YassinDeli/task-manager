@@ -1,7 +1,7 @@
 import React from "react";
 
 export const EntrepriseActionsContext = React.createContext({
-  openCreateEntrepriseSheet: () => {},
+  // openCreateEntrepriseSheet: () => {},
   openUpdateEntrepriseSheet: () => {},
   openActivateEntrepriseDialog: () => {},
   openDeactivateEntrepriseDialog: () => {},

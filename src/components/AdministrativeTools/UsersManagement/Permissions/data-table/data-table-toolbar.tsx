@@ -13,8 +13,7 @@ interface DataTableToolbarProps<TData> {
 export function DataTableToolbar<TData>({
   table,
 }: DataTableToolbarProps<TData>) {
-  const { setPage, searchTerm, setSearchTerm, openSeedPermissionDialog } =
-    usePermissionActions();
+  const { setPage, searchTerm, setSearchTerm } = usePermissionActions();
   return (
     <div className="flex items-center justify-between gap-2">
       <div className="flex items-center space-x-2">
@@ -39,14 +38,6 @@ export function DataTableToolbar<TData>({
         )}
       </div>
       <div className="flex items-center space-x-2">
-        <Button
-          className="h-8 px-2 lg:px-3"
-          variant="ghost"
-          onClick={openSeedPermissionDialog}
-        >
-          <Blocks className="h-6 w-6" />
-          Seed Permissions
-        </Button>
         <DataTableViewOptions table={table} />
       </div>
     </div>

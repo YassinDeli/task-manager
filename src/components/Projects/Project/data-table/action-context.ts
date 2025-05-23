@@ -1,7 +1,7 @@
 import React from "react";
 
 export const ProjectActionsContext = React.createContext({
-  openCreateProjectSheet: () => {},
+  // openCreateProjectSheet: () => {},
   openUpdateProjectSheet: () => {},
   openActivateProjectDialog: () => {},
   openDeactivateProjectDialog: () => {},

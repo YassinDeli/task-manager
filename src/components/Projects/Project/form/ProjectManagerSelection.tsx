@@ -113,7 +113,7 @@ export const UserSelection = ({
                             <Avatar className="h-6 w-6">
                               <AvatarImage
                                 src={`https://avatar.vercel.sh/${user.username}.png`}
-                                alt={user.username}
+                                alt={user.username || ""}
                               />
                               <AvatarFallback>
                                 {user.username?.substring(0, 2).toUpperCase()}
@@ -159,7 +159,7 @@ export const UserSelection = ({
                     <Avatar className="h-12 w-12">
                       <AvatarImage
                         src={`https://avatar.vercel.sh/${selectedUser.username}.png`}
-                        alt={selectedUser.username}
+                        alt={selectedUser.username || ""}
                       />
                       <AvatarFallback>
                         {selectedUser.username?.substring(0, 2).toUpperCase()}

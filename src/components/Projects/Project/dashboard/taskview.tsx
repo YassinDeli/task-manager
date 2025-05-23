@@ -71,11 +71,11 @@ export const ProjectTasksTab = ({
                     <div className="flex items-center gap-2">
                       <Badge
                         variant={
-                          task.status === "DONE"
+                          (task.status === "DONE"
                             ? "success"
                             : task.status === "IN_PROGRESS"
                             ? "default"
-                            : "outline"
+                            : "outline") as any
                         }
                       >
                         {task.status.replace("_", " ")}
@@ -83,11 +83,11 @@ export const ProjectTasksTab = ({
                       {task.priority && (
                         <Badge
                           variant={
-                            task.priority === "HIGH"
+                          (  task.priority === "HIGH"
                               ? "destructive"
                               : task.priority === "MEDIUM"
                               ? "warning"
-                              : "outline"
+                              : "outline") as any
                           }
                         >
                           {task.priority}

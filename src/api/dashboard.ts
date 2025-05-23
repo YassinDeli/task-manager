@@ -1,7 +1,7 @@
 import axios from "axios";
 import { ServerResponse } from "@/types";
 
-export const dashboardApi = {
+export const dashboard = {
   getDashboardData: async (projectId: number): Promise<ServerResponse<any>> => {
     try {
       const response = await axios.get<ServerResponse<any>>(

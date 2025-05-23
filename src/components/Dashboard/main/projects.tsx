@@ -52,6 +52,7 @@ interface Task {
   id: number;
   title: string;
   status: string;
+  deletedAt?: string;
 }
 
 interface Project {

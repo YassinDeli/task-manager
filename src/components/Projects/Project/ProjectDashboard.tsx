@@ -2,10 +2,7 @@
 
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { dashboardApi } from "@/api/dashboard";
 import { ProjectTasksTab } from "./dashboard/taskview";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { ProjectViewTabs } from "./dashboard/Tabs/views";
 import { TabsContent } from "@/components/ui/tabs";
 import { ProjectProgressCard } from "./dashboard/project-stats/ProjectProgressCard";
@@ -14,9 +11,9 @@ import { TeamMembersCard } from "./dashboard/project-stats/TeamMembersCard";
 import { ProjectTimelineCard } from "./dashboard/project-stats/ProjectTimelineCard";
 import { Overview } from "./dashboard/overview";
 import { TeamTab } from "@/components/Projects/Project/dashboard/TeamTab";
-import { Task, Employee, Status, Priority } from "@/types";
 import ContentSection from "@/components/Common/ContentSection";
 import { useBreadcrumb } from "@/context/BreadcrumbContext";
+import { api } from "@/api";
 
 export const ProjectDashboard = () => {
   const router = useRouter();
@@ -32,7 +29,7 @@ export const ProjectDashboard = () => {
     const loadDashboardData = async () => {
       try {
         setIsLoading(true);
-        const response = await dashboardApi.getDashboardData(Number(id));
+        const response = await api.dashboard.getDashboardData(Number(id));
         setDashboardData(response.data);
 
         // Update breadcrumbs after data is loaded
@@ -124,12 +121,12 @@ export const ProjectDashboard = () => {
       const month = new Date(0, i).toLocaleString("default", {
         month: "short",
       });
-      const completed = tasks.filter((task) => {
+      const completed = tasks.filter((task: any) => {
         return (
           task.status === "DONE" && new Date(task.createdAt).getMonth() === i
         );
       }).length;
-      const created = tasks.filter((task) => {
+      const created = tasks.filter((task: any) => {
         const taskDate = new Date(task.createdAt);
         return taskDate.getMonth() === i;
       }).length;
@@ -165,8 +162,8 @@ export const ProjectDashboard = () => {
       },
       // Important tasks with due dates as milestones
       ...tasks
-        .filter((task) => task.dueDate)
-        .map((task) => ({
+        .filter((task: any) => task.dueDate)
+        .map((task: any) => ({
           id: `task-${task.id}`,
           name: task.title,
           date: task.dueDate,

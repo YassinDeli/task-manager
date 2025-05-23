@@ -96,10 +96,10 @@ export class DashboardService {
       // Group tasks by user for contributions
       const tasksByUser = new Map<string, any>();
       tasks.forEach((task) => {
-        if (!tasksByUser.has(task.userId)) {
-          tasksByUser.set(task.userId, []);
+        if (!tasksByUser.has(task.userId || "")) {
+          tasksByUser.set(task.userId || "", []);
         }
-        tasksByUser.get(task.userId).push(task);
+        tasksByUser.get(task.userId || "").push(task);
       });
 
       // Add contributions for each team member
@@ -112,7 +112,7 @@ export class DashboardService {
           teamContributionsData.push({
             name: `${roleName}`,
             tasks: userTasks.length,
-            completed: userTasks.filter((t) => t.status === "DONE").length,
+            completed: userTasks.filter((t : any) => t.status === "DONE").length,
           });
         }
       });
