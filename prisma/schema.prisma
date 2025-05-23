@@ -1,0 +1,229 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator typescriptInterfaces {
+  provider = "prisma-generator-typescript-interfaces"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  firstName     String?
+  lastName      String?
+  dateOfBirth   DateTime?
+  isActive      Boolean?
+  password      String?
+  username      String?   @unique
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  roleId        Int?
+  refreshToken  String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  deletedAt     DateTime?
+  employee      Employee?
+  tasks         Task[]
+  role          Role?     @relation(fields: [roleId], references: [id])
+  projects      Project[]
+
+  @@index([roleId], map: "User_roleId_fkey")
+}
+
+model Role {
+  id          Int              @id @default(autoincrement())
+  label       String           @unique
+  description String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @default(now()) @updatedAt
+  deletedAt   DateTime?
+  permissions RolePermission[]
+  users       User[]
+}
+
+model Permission {
+  id          Int              @id @default(autoincrement())
+  label       String           @unique
+  description String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @default(now()) @updatedAt
+  deletedAt   DateTime?
+  roles       RolePermission[]
+}
+
+model RolePermission {
+  id           Int        @id @default(autoincrement())
+  roleId       Int
+  permissionId Int
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @default(now()) @updatedAt
+  deletedAt    DateTime?
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@index([permissionId], map: "RolePermission_permissionId_fkey")
+  @@index([roleId], map: "RolePermission_roleId_fkey")
+}
+
+model Entreprise {
+  id            Int                  @id @default(autoincrement())
+  name          String
+  addressId     Int?
+  phone         String?
+  email         String
+  responsibleId Int?
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @default(now()) @updatedAt
+  deletedAt     DateTime?
+  employments   EmployeeEntreprise[]
+  address       Address?             @relation(fields: [addressId], references: [id])
+  responsible   Employee?            @relation(fields: [responsibleId], references: [id])
+
+  @@index([addressId], map: "Entreprise_addressId_fkey")
+  @@index([responsibleId], map: "Entreprise_responsibleId_fkey")
+}
+
+model EmployeeEntreprise {
+  id           Int        @id @default(autoincrement())
+  employeeId   Int
+  entrepriseId Int
+  position     String?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @default(now()) @updatedAt
+  deletedAt    DateTime?
+  employee     Employee   @relation(fields: [employeeId], references: [id])
+  entreprise   Entreprise @relation(fields: [entrepriseId], references: [id])
+
+  @@unique([employeeId, entrepriseId])
+  @@index([entrepriseId], map: "EmployeeEntreprise_entrepriseId_fkey")
+}
+
+model Task {
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String?
+  status      Status    @default(TODO)
+  priority    Priority  @default(MEDIUM)
+  dueDate     DateTime?
+  employeeId  Int?
+  projectId   Int?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt
+  deletedAt   DateTime?
+  userId      String?
+  employee    Employee? @relation(fields: [employeeId], references: [id])
+  project     Project?  @relation("ProjectTasks", fields: [projectId], references: [id])
+  user        User?     @relation(fields: [userId], references: [id])
+
+  @@index([employeeId], map: "Task_employeeId_fkey")
+  @@index([projectId], map: "Task_projectId_fkey")
+  @@index([userId], map: "Task_userId_fkey")
+}
+
+model Country {
+  id                   Int       @id @default(autoincrement())
+  alpha2code           String?   @unique @db.VarChar(2)
+  alpha3code           String?   @unique @db.VarChar(3)
+  createdAt            DateTime? @default(now())
+  updatedAt            DateTime? @default(now())
+  deletedAt            DateTime?
+  isDeletionRestricted Boolean   @default(false)
+  addresses            Address[]
+}
+
+model Address {
+  id                   Int          @id @default(autoincrement())
+  address              String?      @db.VarChar(255)
+  address2             String?      @db.VarChar(255)
+  region               String?      @db.VarChar(255)
+  zipcode              String?      @db.VarChar(10)
+  countryId            Int?
+  createdAt            DateTime?    @default(now())
+  updatedAt            DateTime?    @default(now())
+  deletedAt            DateTime?
+  isDeletionRestricted Boolean      @default(false)
+  country              Country?     @relation(fields: [countryId], references: [id])
+  Entreprise           Entreprise[]
+
+  @@index([countryId], map: "Address_countryId_fkey")
+}
+
+model Employee {
+  id                     Int                  @id @default(autoincrement())
+  phone                  String?
+  userId                 String               @unique
+  createdAt              DateTime             @default(now())
+  updatedAt              DateTime             @default(now()) @updatedAt
+  deletedAt              DateTime?
+  user                   User                 @relation(fields: [userId], references: [id])
+  employments            EmployeeEntreprise[]
+  projects               EmployeeProject[]
+  responsibleFor         Entreprise[]
+  responsibleForProjects Project[]
+  tasks                  Task[]
+}
+
+model Project {
+  id            Int       @id @default(autoincrement())
+  name          String
+  description   String?
+  startDate     DateTime?
+  endDate       DateTime?
+  status        Project_status?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now()) @updatedAt
+  deletedAt     DateTime?
+  addressId     Int?
+  priority      Priority  @default(MEDIUM)
+  responsibleId Int?
+  userId        String?
+  employees     EmployeeProject[]
+  responsible   Employee? @relation(fields: [responsibleId], references: [id])
+  tasks         Task[]    @relation("ProjectTasks")
+  user          User?     @relation(fields: [userId], references: [id])
+
+  @@index([responsibleId], map: "Project_responsibleId_fkey")
+  @@index([addressId], map: "Project_addressId_fkey")
+  @@index([userId], map: "Project_userId_fkey")
+}
+
+model EmployeeProject {
+  id         Int       @id @default(autoincrement())
+  employeeId Int
+  projectId  Int
+  role       String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @default(now()) @updatedAt
+  deletedAt  DateTime?
+  employee   Employee  @relation(fields: [employeeId], references: [id])
+  project    Project   @relation(fields: [projectId], references: [id])
+
+  @@unique([employeeId, projectId])
+  @@index([projectId], map: "EmployeeProject_projectId_fkey")
+}
+
+enum Status {
+  TODO
+  IN_PROGRESS
+  DONE
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum Project_status {
+  NOT_STARTED
+  PLANNED
+  IN_PROGRESS
+  COMPLETED
+  ON_HOLD
+  CANCELLED
+}

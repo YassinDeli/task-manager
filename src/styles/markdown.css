@@ -1,0 +1,35 @@
+/* Light Mode */
+[data-color-mode="light"] .w-md-editor-toolbar {
+  background-color: #f0f0f0;
+  border-bottom: 1px solid #ddd;
+}
+
+[data-color-mode="light"] .w-md-editor-toolbar ul {
+  color: #333;
+}
+
+[data-color-mode="light"] .w-md-editor-toolbar button {
+  color: #333;
+}
+
+[data-color-mode="light"] .w-md-editor-toolbar button:hover {
+  background-color: #e0e0e0;
+}
+
+/* Dark Mode */
+[data-color-mode="dark"] .w-md-editor-toolbar {
+  background-color: #0a0a0a;
+  border-bottom: 1px solid #0a0a0a;
+}
+
+[data-color-mode="dark"] .w-md-editor-toolbar ul {
+  color: #c9d1d9;
+}
+
+[data-color-mode="dark"] .w-md-editor-toolbar button {
+  color: #c9d1d9;
+}
+
+[data-color-mode="dark"] .w-md-editor-toolbar button:hover {
+  background-color: #0a0a0a;
+}
