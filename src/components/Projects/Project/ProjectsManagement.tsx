@@ -1,4 +1,4 @@
-import { ContentSection } from "@/components/Common/ContentSection";
+import ContentSection from "@/components/Common/ContentSection";
 import { DataTable } from "./data-table/data-table";
 import { getProjectColumns } from "./data-table/columns";
 import { useProjects } from "@/hooks/use-projects";

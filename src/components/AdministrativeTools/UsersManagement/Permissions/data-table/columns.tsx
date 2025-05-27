@@ -4,33 +4,10 @@ import { Permission } from '@/types/user-management';
 import { DataTableColumnHeader } from './data-table-column-header';
 import { DataTableRowActions } from './data-table-row-actions';
 import { Badge } from '@/components/ui/badge';
-import { Checkbox } from "@/components/ui/checkbox";
+import ContentSection from "@/components/Common/ContentSection";
 
 export const getPermissionColumns = (): ColumnDef<Permission>[] => {
     return [
-        {
-            id: "select",
-            header: ({ table }) => (
-                <div className="w-8">
-                    <Checkbox
-                        checked={table.getIsAllPageRowsSelected()}
-                        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                        aria-label="Select all"
-                    />
-                </div>
-            ),
-            cell: ({ row }) => (
-                <div className="w-8">
-                    <Checkbox
-                        checked={row.getIsSelected()}
-                        onCheckedChange={(value) => row.toggleSelected(!!value)}
-                        aria-label="Select row"
-                    />
-                </div>
-            ),
-            enableSorting: false,
-            enableHiding: false,
-        },
         {
             accessorKey: 'id',
             header: ({ column }) => (
@@ -41,29 +18,29 @@ export const getPermissionColumns = (): ColumnDef<Permission>[] => {
                 />
             ),
             cell: ({ row }) => (
-                <div className="font-medium">
+                <div className="font-mono text-[10px] sm:text-xs break-all max-w-[120px]">
                     {row.original.id}
                 </div>
             ),
             enableSorting: true,
-            enableHiding: false,
+            enableHiding: true,
         },
         {
             accessorKey: 'label',
             header: ({ column }) => (
                 <DataTableColumnHeader
                     column={column}
-                    title="Name"
+                    title="Label"
                     attribute="label"
                 />
             ),
             cell: ({ row }) => (
-                <div className="font-bold">
+                <div className="font-medium text-xs break-words max-w-[100px]">
                     {row.original.label}
                 </div>
             ),
             enableSorting: true,
-            enableHiding: false,
+            enableHiding: true,
         },
         {
             accessorKey: 'description',
@@ -75,9 +52,28 @@ export const getPermissionColumns = (): ColumnDef<Permission>[] => {
                 />
             ),
             cell: ({ row }) => (
-                <div>
-                    {row.original.description || <span className="opacity-70">No Description</span>}
+                <div className="text-xs break-words max-w-[200px]">
+                    {row.original.description || (
+                        <span className="text-muted-foreground">No Description</span>
+                    )}
                 </div>
+            ),
+            enableSorting: true,
+            enableHiding: true,
+        },
+        {
+            accessorKey: 'module',
+            header: ({ column }) => (
+                <DataTableColumnHeader
+                    column={column}
+                    title="Module"
+                    attribute="module"
+                />
+            ),
+            cell: ({ row }) => (
+                <Badge variant="outline" className="text-[10px] font-medium whitespace-nowrap">
+                    {row.original.module}
+                </Badge>
             ),
             enableSorting: true,
             enableHiding: true,
@@ -85,7 +81,7 @@ export const getPermissionColumns = (): ColumnDef<Permission>[] => {
         {
             id: 'actions',
             cell: ({ row }) => (
-                <div className="flex justify-center">
+                <div className="flex justify-end">
                     <DataTableRowActions row={row} />
                 </div>
             ),
