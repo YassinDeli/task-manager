@@ -30,6 +30,7 @@ export interface Permission extends DatabaseEntity {
   id: number;
   label: string;
   description: string | null;
+  module?: string;
   roles?: RolePermission[];
 }
 

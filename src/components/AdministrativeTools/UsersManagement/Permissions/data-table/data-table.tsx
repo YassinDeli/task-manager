@@ -47,8 +47,7 @@ export function DataTable<TData, TValue>({
   const isMobile = useMediaQuery("(max-width: 768px)");
   
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({
-    description: !isMobile,
-    module: !isMobile,
+    description: false,
   });
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -57,7 +56,6 @@ export function DataTable<TData, TValue>({
     setColumnVisibility(prev => ({
       ...prev,
       description: !isMobile,
-      module: !isMobile,
     }));
   }, [isMobile]);
 
