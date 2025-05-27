@@ -1,10 +1,24 @@
 import { ColumnDef } from "@tanstack/react-table";
+import { cn } from "@/lib/utils";
+import { Role } from "@/types/user-management";
 import { DataTableColumnHeader } from "./data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
-import { Role } from "@/types/user-management";
 
 export const getRoleColumns = (): ColumnDef<Role>[] => {
   return [
+    {
+      accessorKey: "id",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="ID" attribute="id" />
+      ),
+      cell: ({ row }) => (
+        <div className="font-mono text-[10px] sm:text-xs break-all max-w-[120px]">
+          {row.original.id}
+        </div>
+      ),
+      enableSorting: true,
+      enableHiding: true,
+    },
     {
       accessorKey: "label",
       header: ({ column }) => (
@@ -14,7 +28,11 @@ export const getRoleColumns = (): ColumnDef<Role>[] => {
           attribute="label"
         />
       ),
-      cell: ({ row }) => <div>{row.original.label}</div>,
+      cell: ({ row }) => (
+        <div className="font-medium text-xs break-words max-w-[100px]">
+          {row.original.label}
+        </div>
+      ),
       enableSorting: true,
       enableHiding: true,
     },
@@ -28,7 +46,11 @@ export const getRoleColumns = (): ColumnDef<Role>[] => {
         />
       ),
       cell: ({ row }) => (
-        <div>{row.original.description || "No Description"}</div>
+        <div className="text-xs break-words max-w-[200px]">
+          {row.original.description || (
+            <span className="text-muted-foreground">No Description</span>
+          )}
+        </div>
       ),
       enableSorting: true,
       enableHiding: true,
@@ -74,7 +96,7 @@ export const getRoleColumns = (): ColumnDef<Role>[] => {
     {
       id: "actions",
       cell: ({ row }) => (
-        <div className="flex justify-center">
+        <div className="flex justify-end">
           <DataTableRowActions row={row} />
         </div>
       ),

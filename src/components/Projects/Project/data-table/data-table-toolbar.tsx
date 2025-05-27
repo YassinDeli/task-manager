@@ -16,9 +16,10 @@ export function DataTableToolbar<TData>({
 }: DataTableToolbarProps<TData>) {
   const router = useRouter();
   const { setPage, searchTerm, setSearchTerm } = useProjectActions();
+  
   return (
-    <div className="flex items-center justify-between gap-2">
-      <div className="flex flex-1 items-center space-x-2">
+    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-1 items-center gap-2">
         <Input
           placeholder="Filter Projects..."
           value={searchTerm.toString()}
@@ -26,7 +27,7 @@ export function DataTableToolbar<TData>({
             setPage(1);
             setSearchTerm(event.target.value);
           }}
-          className="h-8 w-[150px] lg:w-[300px]"
+          className="h-8 w-full sm:w-[300px]"
         />
         {searchTerm && (
           <Button
@@ -39,15 +40,17 @@ export function DataTableToolbar<TData>({
           </Button>
         )}
       </div>
-      <Button
-        className="h-8 px-2 lg:px-3"
-        variant="ghost"
-        onClick={() => router.push("/projects/new-project")}
-      >
-        <PackagePlus className="h-6 w-6" />
-        New Project
-      </Button>
-      <DataTableViewOptions table={table} />
+      <div className="flex items-center gap-2">
+        <Button
+          className="h-8 w-full sm:w-auto"
+          variant="outline"
+          onClick={() => router.push("/projects/new-project")}
+        >
+          <PackagePlus className="mr-2 h-4 w-4" />
+          New Project
+        </Button>
+        <DataTableViewOptions table={table} />
+      </div>
     </div>
   );
 }

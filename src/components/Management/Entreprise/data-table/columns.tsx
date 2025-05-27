@@ -13,7 +13,11 @@ export const getEntrepriseColumns = (): ColumnDef<Entreprise>[] => {
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="ID" attribute="id" />
       ),
-      cell: ({ row }) => <div>{row.original.id}</div>,
+      cell: ({ row }) => (
+        <div className="font-mono text-[10px] sm:text-xs break-all max-w-[120px]">
+          {row.original.id}
+        </div>
+      ),
       enableSorting: true,
       enableHiding: true,
     },
@@ -22,7 +26,11 @@ export const getEntrepriseColumns = (): ColumnDef<Entreprise>[] => {
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Name" attribute="name" />
       ),
-      cell: ({ row }) => <div className="font-bold">{row.original.name}</div>,
+      cell: ({ row }) => (
+        <div className="font-medium text-xs break-words max-w-[150px]">
+          {row.original.name}
+        </div>
+      ),
       enableSorting: true,
       enableHiding: true,
     },
@@ -35,7 +43,11 @@ export const getEntrepriseColumns = (): ColumnDef<Entreprise>[] => {
           attribute="email"
         />
       ),
-      cell: ({ row }) => <div className="font-bold">{row.original.email}</div>,
+      cell: ({ row }) => (
+        <div className="text-xs break-words max-w-[200px]">
+          {row.original.email}
+        </div>
+      ),
       enableSorting: true,
       enableHiding: true,
     },
@@ -49,14 +61,13 @@ export const getEntrepriseColumns = (): ColumnDef<Entreprise>[] => {
         />
       ),
       cell: ({ row }) => (
-        <div>
-          {row.original.phone || <span className="opacity-70">No Phone</span>}
+        <div className="text-xs whitespace-nowrap">
+          {row.original.phone || <span className="text-muted-foreground">No Phone</span>}
         </div>
       ),
       enableSorting: true,
       enableHiding: true,
     },
-
     {
       accessorKey: "createdAt",
       header: ({ column }) => (
@@ -67,7 +78,9 @@ export const getEntrepriseColumns = (): ColumnDef<Entreprise>[] => {
         />
       ),
       cell: ({ row }) => (
-        <div>{new Date(row.original.createdAt).toISOString()}</div>
+        <div className="text-xs whitespace-nowrap">
+          {format(new Date(row.original.createdAt), "yyyy-MM-dd")}
+        </div>
       ),
       enableSorting: true,
       enableHiding: true,
@@ -75,7 +88,7 @@ export const getEntrepriseColumns = (): ColumnDef<Entreprise>[] => {
     {
       id: "actions",
       cell: ({ row }) => (
-        <div className="flex justify-center">
+        <div className="flex justify-end">
           <DataTableRowActions row={row} />
         </div>
       ),

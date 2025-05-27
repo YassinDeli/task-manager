@@ -4,7 +4,7 @@ import { DataTableColumnHeader } from "./data-table-column-header";
 import { Badge } from "@/components/ui/badge";
 import { DataTableRowActions } from "./data-table-row-actions";
 import { format } from "date-fns";
-import { Task } from "@/types";
+import { Task } from "@/types/task";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   CircleDot, // for TODO
@@ -20,6 +20,20 @@ import {
   MinusIcon,
   ArrowUpIcon, // HIGH
 } from "lucide-react";
+import { TaskPriority, TaskStatus } from "@/types/task";
+
+const priorityColors = {
+  [TaskPriority.LOW]: "bg-green-600",
+  [TaskPriority.MEDIUM]: "bg-yellow-600",
+  [TaskPriority.HIGH]: "bg-red-600",
+};
+
+const statusColors = {
+  [TaskStatus.TODO]: "bg-gray-600",
+  [TaskStatus.IN_PROGRESS]: "bg-blue-600",
+  [TaskStatus.DONE]: "bg-green-600",
+  [TaskStatus.BLOCKED]: "bg-red-600",
+};
 
 export const getTaskColumns = (): ColumnDef<Task>[] => {
   return [
@@ -53,6 +67,19 @@ export const getTaskColumns = (): ColumnDef<Task>[] => {
       enableHiding: false,
     },
     {
+      accessorKey: "id",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="ID" attribute="id" />
+      ),
+      cell: ({ row }) => (
+        <div className="font-mono text-[10px] sm:text-xs break-all max-w-[120px]">
+          {row.original.id}
+        </div>
+      ),
+      enableSorting: true,
+      enableHiding: true,
+    },
+    {
       accessorKey: "title",
       header: ({ column }) => (
         <DataTableColumnHeader
@@ -61,7 +88,11 @@ export const getTaskColumns = (): ColumnDef<Task>[] => {
           attribute="title"
         />
       ),
-      cell: ({ row }) => <div className="font-bold">{row.original.title}</div>,
+      cell: ({ row }) => (
+        <div className="font-medium text-xs break-words max-w-[150px]">
+          {row.original.title}
+        </div>
+      ),
       enableSorting: true,
       enableHiding: true,
     },
@@ -75,80 +106,9 @@ export const getTaskColumns = (): ColumnDef<Task>[] => {
         />
       ),
       cell: ({ row }) => (
-        <div className="font-bold">{row.original.description}</div>
-      ),
-      enableSorting: true,
-      enableHiding: true,
-    },
-    {
-      accessorKey: "status",
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title="Status"
-          attribute="status"
-        />
-      ),
-      cell: ({ row }) => (
-        <Badge
-          variant="outline"
-          className="flex gap-1 px-1.5 text-muted-foreground [&_svg]:size-3"
-        >
-          {row.original.status === "DONE" ? (
-            <CheckCircle2Icon className="text-green-500 dark:text-green-400" />
-          ) : row.original.status === "TODO" ? (
-            <ClipboardListIcon className="text-blue-500 dark:text-blue-400" />
-          ) : (
-            <LoaderIcon />
-          )}
-          {row.original.status}
-        </Badge>
-      ),
-      enableSorting: true,
-      enableHiding: true,
-    },
-
-    {
-      accessorKey: "priority",
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title="Priority"
-          attribute="priority"
-        />
-      ),
-      cell: ({ row }) => (
-        <Badge
-          variant="outline"
-          className="flex gap-1 px-1.5 text-muted-foreground [&_svg]:size-3"
-        >
-          {row.original.priority === "LOW" ? (
-            <ArrowDownIcon className="text-blue-500 dark:text-blue-400" />
-          ) : row.original.priority === "MEDIUM" ? (
-            <MinusIcon className="text-yellow-500 dark:text-yellow-400" />
-          ) : row.original.priority === "HIGH" ? (
-            <ArrowUpIcon className="text-red-500 dark:text-red-400" />
-          ) : null}
-          {row.original.priority}
-        </Badge>
-      ),
-      enableSorting: true,
-      enableHiding: true,
-    },
-
-    {
-      accessorKey: "Employee",
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title="Employee"
-          attribute="user.username"
-        />
-      ),
-      cell: ({ row }) => (
-        <div>
-          {row.original?.user?.username || (
-            <span className="opacity-70">No Employee Assigned Yet</span>
+        <div className="text-xs break-words max-w-[200px]">
+          {row.original.description || (
+            <span className="text-muted-foreground">No Description</span>
           )}
         </div>
       ),
@@ -165,10 +125,92 @@ export const getTaskColumns = (): ColumnDef<Task>[] => {
         />
       ),
       cell: ({ row }) => (
-        <div>
-          {row.original?.project?.name || (
-            <span className="opacity-70">No Project Assigned Yet</span>
+        <div className="text-xs break-words max-w-[100px]">
+          {row.original.project?.name || (
+            <span className="text-muted-foreground">No Project</span>
           )}
+        </div>
+      ),
+      enableSorting: true,
+      enableHiding: true,
+    },
+    {
+      accessorKey: "status",
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title="Status"
+          attribute="status"
+        />
+      ),
+      cell: ({ row }) => (
+        <Badge
+          className={cn(
+            "text-[10px] font-medium text-white whitespace-nowrap px-1.5 py-0.5",
+            statusColors[row.original.status]
+          )}
+        >
+          {row.original.status}
+        </Badge>
+      ),
+      enableSorting: true,
+      enableHiding: true,
+    },
+    {
+      accessorKey: "priority",
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title="Priority"
+          attribute="priority"
+        />
+      ),
+      cell: ({ row }) => (
+        <Badge
+          className={cn(
+            "text-[10px] font-medium text-white whitespace-nowrap px-1.5 py-0.5",
+            priorityColors[row.original.priority]
+          )}
+        >
+          {row.original.priority}
+        </Badge>
+      ),
+      enableSorting: true,
+      enableHiding: true,
+    },
+    {
+      accessorKey: "dueDate",
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title="Due Date"
+          attribute="dueDate"
+        />
+      ),
+      cell: ({ row }) => (
+        <div className="text-xs whitespace-nowrap">
+          {row.original.dueDate ? (
+            format(row.original.dueDate, "yyyy-MM-dd")
+          ) : (
+            <span className="text-muted-foreground">No Due Date</span>
+          )}
+        </div>
+      ),
+      enableSorting: true,
+      enableHiding: true,
+    },
+    {
+      accessorKey: "createdAt",
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title="Created At"
+          attribute="createdAt"
+        />
+      ),
+      cell: ({ row }) => (
+        <div>
+          {format(new Date(row.original.createdAt), "yyyy-MM-dd HH:mm:ss")}
         </div>
       ),
       enableSorting: true,

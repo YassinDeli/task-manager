@@ -13,7 +13,11 @@ export const getUserColumns = (): ColumnDef<User>[] => {
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="ID" attribute="id" />
       ),
-      cell: ({ row }) => <div>{row.original.id}</div>,
+      cell: ({ row }) => (
+        <div className="font-mono text-[10px] sm:text-xs break-all max-w-[120px]">
+          {row.original.id}
+        </div>
+      ),
       enableSorting: true,
       enableHiding: true,
     },
@@ -27,7 +31,9 @@ export const getUserColumns = (): ColumnDef<User>[] => {
         />
       ),
       cell: ({ row }) => (
-        <div className="font-bold">{row.original.username}</div>
+        <div className="font-medium text-xs break-words max-w-[100px]">
+          {row.original.username}
+        </div>
       ),
       enableSorting: true,
       enableHiding: true,
@@ -41,7 +47,11 @@ export const getUserColumns = (): ColumnDef<User>[] => {
           attribute="email"
         />
       ),
-      cell: ({ row }) => <div className="font-bold">{row.original.email}</div>,
+      cell: ({ row }) => (
+        <div className="font-medium text-xs break-words max-w-[150px]">
+          {row.original.email}
+        </div>
+      ),
       enableSorting: true,
       enableHiding: true,
     },
@@ -55,9 +65,9 @@ export const getUserColumns = (): ColumnDef<User>[] => {
         />
       ),
       cell: ({ row }) => (
-        <div>
+        <div className="text-xs break-words max-w-[100px]">
           {row.original.firstName || (
-            <span className="opacity-70">Not Defined</span>
+            <span className="text-muted-foreground">Not Defined</span>
           )}
         </div>
       ),
@@ -74,9 +84,9 @@ export const getUserColumns = (): ColumnDef<User>[] => {
         />
       ),
       cell: ({ row }) => (
-        <div>
+        <div className="text-xs break-words max-w-[100px]">
           {row.original.lastName || (
-            <span className="opacity-70">Not Defined</span>
+            <span className="text-muted-foreground">Not Defined</span>
           )}
         </div>
       ),
@@ -88,15 +98,15 @@ export const getUserColumns = (): ColumnDef<User>[] => {
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title="Date of Birth"
+          title="Birth"
           attribute="dateOfBirth"
         />
       ),
       cell: ({ row }) => (
-        <div>
+        <div className="text-xs whitespace-nowrap">
           {(row.original.dateOfBirth &&
             format(row.original.dateOfBirth, "yyyy-MM-dd")) || (
-            <span className="opacity-70">Not Defined</span>
+            <span className="text-muted-foreground">Not Defined</span>
           )}
         </div>
       ),
@@ -113,9 +123,9 @@ export const getUserColumns = (): ColumnDef<User>[] => {
         />
       ),
       cell: ({ row }) => (
-        <div>
+        <div className="text-xs break-words max-w-[100px]">
           {row.original?.role?.label || (
-            <span className="opacity-70">No Role Assigned Yet</span>
+            <span className="text-muted-foreground">No Role</span>
           )}
         </div>
       ),
@@ -134,7 +144,7 @@ export const getUserColumns = (): ColumnDef<User>[] => {
       cell: ({ row }) => (
         <Badge
           className={cn(
-            "font-bold text-white",
+            "text-[10px] font-medium text-white whitespace-nowrap px-1.5 py-0.5",
             row.original.isActive ? "bg-green-600" : "bg-red-600"
           )}
         >
@@ -147,7 +157,7 @@ export const getUserColumns = (): ColumnDef<User>[] => {
     {
       id: "actions",
       cell: ({ row }) => (
-        <div className="flex justify-center">
+        <div className="flex justify-end">
           <DataTableRowActions row={row} />
         </div>
       ),
