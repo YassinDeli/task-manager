@@ -3,8 +3,18 @@ import { Role } from "./user-management";
 import { EmployeeEntreprise, Entreprise } from "./entreprise";
 
 // Define the Status and Priority enums
-export type Status = "TODO" | "IN_PROGRESS" | "DONE";
-export type Priority = "LOW" | "MEDIUM" | "HIGH";
+export enum Status {
+  TODO = "TODO",
+  IN_PROGRESS = "IN_PROGRESS",
+  DONE = "DONE"
+}
+
+export enum Priority {
+  LOW = "LOW",
+  MEDIUM = "MEDIUM",
+  HIGH = "HIGH"
+}
+
 export type ProjectStatus = "PLANNED" | "IN_PROGRESS" | "COMPLETED" | "ON_HOLD";
 
 export interface Task extends DatabaseEntity {

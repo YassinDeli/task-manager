@@ -2,12 +2,13 @@
 import { useDrop } from "react-dnd";
 import { CheckCircle, Clock, ListTodo } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Status } from "@/types/task";
 
 type TaskColumnProps = {
   title: string;
-  status: "TODO" | "IN_PROGRESS" | "DONE";
+  status: Status;
   children: React.ReactNode;
-  onDropTask: (id: string, status: "TODO" | "IN_PROGRESS" | "DONE") => void;
+  onDropTask: (id: string, status: Status) => void;
 };
 
 export function TaskColumn({
@@ -36,11 +37,11 @@ export function TaskColumn({
       )}
     >
       <h2 className="font-semibold text-lg mb-4 flex items-center gap-2">
-        {status === "TODO" && <ListTodo className="h-5 w-5 text-blue-500" />}
-        {status === "IN_PROGRESS" && (
+        {status === Status.TODO && <ListTodo className="h-5 w-5 text-blue-500" />}
+        {status === Status.IN_PROGRESS && (
           <Clock className="h-5 w-5 text-amber-500" />
         )}
-        {status === "DONE" && (
+        {status === Status.DONE && (
           <CheckCircle className="h-5 w-5 text-green-500" />
         )}
         {title}

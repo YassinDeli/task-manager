@@ -6,7 +6,7 @@ import { useTaskStore } from "@/hooks/stores/useTaskStore";
 import { Button } from "@/components/ui/button";
 import { TaskColumn } from "@/components/Tasks/Kanban/kanbanBoard/task-column";
 import { TaskCard } from "@/components/Tasks/Kanban/kanbanBoard/task-card";
-import { Task } from "@/types/task";
+import { Task, Status } from "@/types/task";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/api";
 import { toast } from "sonner";
@@ -137,13 +137,13 @@ const KanbanBoard = ({ className = "" }: KanbanBoardProps) => {
     resetTask: () => taskStore.reset(),
   });
 
-  const moveTask = (id: string, newStatus: "TODO" | "IN_PROGRESS" | "DONE") => {
+  const moveTask = (id: string, newStatus: Status) => {
     updateTask({ id: parseInt(id), task: { status: newStatus } });
   };
 
-  const todoTasks = tasks.filter((task) => task.status === "TODO");
-  const inProgressTasks = tasks.filter((task) => task.status === "IN_PROGRESS");
-  const doneTasks = tasks.filter((task) => task.status === "DONE");
+  const todoTasks = tasks.filter((task) => task.status === Status.TODO);
+  const inProgressTasks = tasks.filter((task) => task.status === Status.IN_PROGRESS);
+  const doneTasks = tasks.filter((task) => task.status === Status.DONE);
 
   return (
     <div className={className}>
@@ -160,7 +160,7 @@ const KanbanBoard = ({ className = "" }: KanbanBoardProps) => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 overflow-y-auto h-full">
-          <TaskColumn title="To Do" status="TODO" onDropTask={moveTask}>
+          <TaskColumn title="To Do" status={Status.TODO} onDropTask={moveTask}>
             {todoTasks.map((task) => (
               <TaskCard
                 key={task.id}
@@ -173,7 +173,7 @@ const KanbanBoard = ({ className = "" }: KanbanBoardProps) => {
 
           <TaskColumn
             title="In Progress"
-            status="IN_PROGRESS"
+            status={Status.IN_PROGRESS}
             onDropTask={moveTask}
           >
             {inProgressTasks.map((task) => (
@@ -186,7 +186,7 @@ const KanbanBoard = ({ className = "" }: KanbanBoardProps) => {
             ))}
           </TaskColumn>
 
-          <TaskColumn title="Done" status="DONE" onDropTask={moveTask}>
+          <TaskColumn title="Done" status={Status.DONE} onDropTask={moveTask}>
             {doneTasks.map((task) => (
               <TaskCard
                 key={task.id}

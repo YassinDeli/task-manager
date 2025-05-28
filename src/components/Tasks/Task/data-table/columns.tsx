@@ -4,7 +4,7 @@ import { DataTableColumnHeader } from "./data-table-column-header";
 import { Badge } from "@/components/ui/badge";
 import { DataTableRowActions } from "./data-table-row-actions";
 import { format } from "date-fns";
-import { Task } from "@/types/task";
+import { Task, Priority, Status } from "@/types/task";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   CircleDot, // for TODO
@@ -20,19 +20,17 @@ import {
   MinusIcon,
   ArrowUpIcon, // HIGH
 } from "lucide-react";
-import { TaskPriority, TaskStatus } from "@/types/task";
 
 const priorityColors = {
-  [TaskPriority.LOW]: "bg-green-600",
-  [TaskPriority.MEDIUM]: "bg-yellow-600",
-  [TaskPriority.HIGH]: "bg-red-600",
+  [Priority.LOW]: "bg-green-600",
+  [Priority.MEDIUM]: "bg-yellow-600",
+  [Priority.HIGH]: "bg-red-600",
 };
 
 const statusColors = {
-  [TaskStatus.TODO]: "bg-gray-600",
-  [TaskStatus.IN_PROGRESS]: "bg-blue-600",
-  [TaskStatus.DONE]: "bg-green-600",
-  [TaskStatus.BLOCKED]: "bg-red-600",
+  [Status.TODO]: "bg-gray-600",
+  [Status.IN_PROGRESS]: "bg-blue-600",
+  [Status.DONE]: "bg-green-600",
 };
 
 export const getTaskColumns = (): ColumnDef<Task>[] => {
